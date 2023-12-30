@@ -38,13 +38,13 @@ class AnalyseTexteInput(BaseModel):
 
 def QueryOpenAI (query:str):
     #déclarer mon secrert key 
-    openai.api_key="key"
+    openai.api_key="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"
     #Code pour faire la requête  
     client = openai.ChatCompletion.create(    
     model="gpt-3.5-turbo",   
     messages=[   
-        {"role":"system", "content": "You are a computer science university teacher"},      
-        {"role": "assistant","content" : "You are speicalized in AI, machine learning and deeplearning.."},
+        {"role": "system", "content": "Bienvenue dans le chatbot assistant de cuisine."},
+        {"role": "assistant", "content": "Je suis là pour vous aider à trouver des recettes culinaires. Posez-moi simplement des questions ou demandez-moi des suggestions!"},
         {"role": "user", "content": query} 
     ] 
     )
@@ -54,32 +54,29 @@ def QueryOpenAI (query:str):
     return response
 
 
-@app.post("/analyse")
+@app.post("/recette")
 def analyse_endpoint(analyse_input: AnalyseTexteInput):
-    #miniscule
+    
     texte=(analyse_input.texte).lower()
     words=nltk.word_tokenize (texte)
     print(words)
-    #stopwords
+    
     stop_words = set(stopwords.words('english'))
     tokens = [word for word in words if word not in stop_words] 
     print(tokens)
-    # Liste des ponctuations
+    
     punctuations = set('!"#$%&\'()*+,-./:;<=>?@[\\]^_^{|}~')       
-    #Suppression des ponctuations
     tokens = [word for word in tokens if word.lower() not in punctuations]
     lemmatizer = WordNetLemmatizer()
     lemmatized_words = [lemmatizer.lemmatize(word) for word in tokens]
     print(lemmatized_words) 
-    query=" ".join(lemmatized_words) + " In context of Computer Science"
+    query=" ".join(lemmatized_words) + " should be Tunisian recipe"
     print(query) 
-    #On doit utiliser OpenAI
-    reponse= QueryOpenAI(query)
-    return {"msg": reponse}
+    recette= QueryOpenAI(query)
+    return {"msg": recette}
 
 
-@app.post("/analyseV1")
-def analyse_endpoint(analyse_input: AnalyseTexteInput):
+
     print(analyse_input)
     #miniscule
     texte=(analyse_input.texte).lower()

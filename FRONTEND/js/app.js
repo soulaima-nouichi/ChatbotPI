@@ -18,7 +18,7 @@ async function sendQuery() {
     const responseDiv = document.getElementById('reponse_msg');
     responseDiv.innerHTML += `<p>User: ${userInput}</p>`;
 
-    const response = await axios.post('http://127.0.0.1:8000/analyse', { texte: userInput });
+    const response = await axios.post('http://127.0.0.1:8000/recette', { texte: userInput });
     const responseData = response.data;
 
     const chatbotResponse = `<p>Chatbot: <span id="responseSpan"></span></p>`;
